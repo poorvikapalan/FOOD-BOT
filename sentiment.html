@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Food Feedback | Colored Icons</title>
+
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://tse1.mm.bing.net/th/id/OIP.agZGh3091SVydptpKkLR8QHaE7?pid=Api&P=0&h=180') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      backdrop-filter: brightness(0.85);
+    }
+
+    .feedback-container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px 35px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      max-width: 450px;
+      width: 100%;
+      text-align: center;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .feedback-container h2 {
+      margin-bottom: 25px;
+      color: #333;
+      width: 100%;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 30px;
+      width: 100%;
+    }
+
+    .option {
+      background: #eef2f7;
+      border-radius: 8px;
+      padding: 12px 20px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #444;
+      transition: background-color 0.3s, color 0.3s;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .option:hover {
+      background: #d1e7ff;
+    }
+
+    .option i.icon {
+      font-size: 20px;
+      margin-right: 12px;
+      transition: transform 0.3s ease;
+    }
+
+    .option:hover i.icon {
+      transform: scale(1.2);
+    }
+
+    input[type="radio"] {
+      display: none;
+    }
+
+    input[type="radio"]:checked + label {
+      background: #007bff;
+      color: white;
+    }
+
+    input[type="radio"]:checked + label i.icon {
+      color: white;
+    }
+
+    /* Icon colors */
+    .icon-delicious { color: #ff6f61; }
+    .icon-good { color: #28a745; }
+    .icon-average { color: #ffc107; }
+    .icon-bad { color: #fd7e14; }
+    .icon-terrible { color: #dc3545; }
+
+    .sentiment-positive { color: #27ae60; }
+    .sentiment-neutral { color: #f39c12; }
+    .sentiment-negative { color: #c0392b; }
+
+    .sentiment-icon {
+      margin-right: 8px;
+      font-size: 1.2rem;
+    }
+
+    button[type="submit"] {
+      background: #007bff;
+      color: white;
+      font-weight: 700;
+      border: none;
+      padding: 14px 0;
+      width: 100%;
+      border-radius: 50px;
+      font-size: 1.15rem;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(0,123,255,0.4);
+      transition: background-color 0.3s ease;
+      margin-bottom: 20px;
+    }
+
+    button[type="submit"]:hover {
+      background: #0056b3;
+    }
+
+    #result {
+      margin-top: 25px;
+      text-align: center;
+      font-weight: 600;
+      color: #222;
+      width: 100%;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.4s ease-in-out;
+    }
+
+    #result.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .loader {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #007bff;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+
+    @keyframes spin {
+      0% {transform: rotate(0deg);}
+      100% {transform: rotate(360deg);}
+    }
+
+    .buttons-wrapper {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      margin-top: 30px;
+      gap: 20px;
+    }
+
+    .nav-button, .back-button {
+      color: #007bff;
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 1rem;
+      background: none;
+      border: none;
+      transition: color 0.3s ease;
+      font-weight: 600;
+    }
+
+    .nav-button:hover, .back-button:hover {
+      color: #0056b3;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="feedback-container">
+
+  <h2>How was your food?</h2>
+
+  <form id="feedbackForm" style="width:100%">
+    <div class="options">
+      <div>
+        <input type="radio" id="delicious" name="feedback" value="Delicious" required />
+        <label for="delicious" class="option">
+          <i class="fas fa-utensils icon icon-delicious"></i> Delicious
+        </label>
+      </div>
+      <div>
+        <input type="radio" id="good" name="feedback" value="Good" />
+        <label for="good" class="option">
+          <i class="fas fa-thumbs-up icon icon-good"></i> Good
+        </label>
+      </div>
+      <div>
+        <input type="radio" id="average" name="feedback" value="Average" />
+        <label for="average" class="option">
+          <i class="fas fa-meh icon icon-average"></i> Average
+        </label>
+      </div>
+      <div>
+        <input type="radio" id="bad" name="feedback" value="Bad" />
+        <label for="bad" class="option">
+          <i class="fas fa-frown icon icon-bad"></i> Bad
+        </label>
+      </div>
+      <div>
+        <input type="radio" id="terrible" name="feedback" value="Terrible" />
+        <label for="terrible" class="option">
+          <i class="fas fa-sad-tear icon icon-terrible"></i> Terrible
+        </label>
+      </div>
+    </div>
+    <button type="submit">Submit Feedback</button>
+  </form>
+
+  <div id="result"></div>
+
+  <div class="buttons-wrapper">
+    <button type="button" class="back-button" onclick="window.location.href='index.html'">⬅ Back Home</button>
+    <button type="button" class="nav-button" onclick="window.location.href='text_to_speech.html'">Text to Speech</button>
+  </div>
+
+</div>
+
+<script>
+  const form = document.getElementById('feedbackForm');
+  const resultDiv = document.getElementById('result');
+
+  const API_KEY = 'NgGRmo1L0XWS1bDWWpfUcxgwtwmemXofPuWVCU3Vxbhc';
+  const API_URL = 'https://api.au-syd.natural-language-understanding.watson.cloud.ibm.com/instances/1cc1816c-2b56-4dcd-b578-00025cbd3447/v1/analyze?version=2021-08-01';
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const selected = form.feedback.value;
+    const feedback = `The food was ${selected.toLowerCase()}.`;
+
+    resultDiv.innerHTML = '<div class="loader"></div>';
+    resultDiv.classList.remove('visible');
+
+    const data = {
+      text: feedback,
+      features: {
+        sentiment: {}
+      }
+    };
+
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Basic ' + btoa('apikey:' + API_KEY),
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      const sentiment = result.sentiment.document.label;
+
+      let sentimentClass = 'sentiment-neutral';
+      let sentimentIcon = '<i class="fas fa-meh sentiment-icon"></i>';
+      let sentimentMessage = 'Thanks for your feedback!';
+
+      if (sentiment === 'positive') {
+        sentimentClass = 'sentiment-positive';
+        sentimentIcon = '<i class="fas fa-smile-beam sentiment-icon"></i>';
+        sentimentMessage = '😊 Glad you enjoyed it!';
+      } else if (sentiment === 'negative') {
+        sentimentClass = 'sentiment-negative';
+        sentimentIcon = '<i class="fas fa-sad-tear sentiment-icon"></i>';
+        sentimentMessage = '😟 Sorry it wasn\'t great.';
+      }
+
+      resultDiv.innerHTML = `
+        <div class="${sentimentClass}">
+          <p>Your feedback: <strong>${selected}</strong></p>
+          <p>${sentimentIcon} <strong>Sentiment:</strong> ${sentiment.toUpperCase()}</p>
+          <p>${sentimentMessage}</p>
+        </div>
+      `;
+
+      resultDiv.classList.add('visible');
+
+    } catch (error) {
+      resultDiv.innerHTML = `<p style="color:red;">❌ Failed to analyze sentiment. Please try again later.</p>`;
+      console.error(error);
+    }
+  });
+</script>
+
+</body>
+</html>
+
